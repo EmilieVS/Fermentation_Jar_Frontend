@@ -1,17 +1,70 @@
 <template>
-    <form action="" class="flex flex-col gap-2 font-body bg-regular-blue text-white p-2">
-        <h2>Login</h2>
-        <label for="email">Email</label>
-        <input type="text" name="email" placeholder="email@example.com" required class="rounded bg-dark-blue">
-        <label for="password">Password</label>
-        <input type="text" name="password" placeholder="your password" required class="rounded bg-dark-blue">
-        <p id="login-error-message" class="hidden">
-            Invalid email or password, please try again!
-        </p>
-        <button type="submit" class="bg-light-blue">Continue</button>
-    </form>
+    <div class="flex flex-col justify-center items-center h-screen bg-dark-blue">
+        <form id="login-form"
+            class="flex flex-col justify-center items-left w-1/2 gap-3 font-body bg-regular-blue text-white p-8 rounded-2xl">
+
+            <h2 class="text-3xl font-semibold">Login</h2>
+
+            <div class="flex flex-col gap-1">
+                <label for="email">Email</label>
+                <input id="email" type="text" name="email" placeholder="email@example.com" required
+                    class="rounded-xl bg-dark-blue p-2">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" placeholder="your password" required
+                    class="rounded-xl bg-dark-blue p-2">
+            </div>
+
+            <p id="login-error-message" class="hidden">
+                Invalid email or password, please try again.
+            </p>
+
+            <div class="flex items-center justify-center">
+                <button type="submit" class="w-1/2 bg-light-blue p-1 rounded-xl">
+                    Continue
+                </button>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script setup>
+import { useAuthStore } from '../stores/auth';
+import router from '../router/index.js';
+import { onMounted } from 'vue';
 
+const auth = useAuthStore();
+
+onMounted(() => {
+    const loginForm = document.querySelector('#login-form');
+    const loginErrorMessage = document.querySelector('#login-error-message');
+
+    loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const email = document.querySelector('#email').value;
+        const password = document.querySelector('#password').value;
+
+        fetch("http://localhost:8000/api/login", {
+            method: 'Post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error;
+                }
+                auth.setToken(data.access_token);
+                router.push('/home');
+            })
+            .catch(error => {
+                console.log(error);
+                loginErrorMessage.classList.remove('hidden');
+                loginErrorMessage.classList.add('block');
+            })
+    });
+});
 </script>
