@@ -77,6 +77,7 @@ onMounted(() => {
                 if (data.error) {
                     throw data.error;
                 }
+                auth.setToken(data.access_token);
                 router.push('/home');
             })
             .catch(error => {
