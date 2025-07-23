@@ -1,7 +1,13 @@
 <template>
     <div class="flex flex-col justify-center items-center h-screen bg-dark-blue">
+        <div class="absolute top-3 left-3 h-10 w-10">
+            <RouterLink to="/home">
+                <img src="../assets/icons/back_arrow_button.png" alt="Back Arrow Button" class="">
+            </RouterLink>
+        </div>
+
         <form id="register-form"
-            class="flex flex-col justify-center items-left w-1/2 gap-3 font-body bg-regular-blue text-white p-8 rounded-2xl">
+            class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body bg-regular-blue text-white p-8 rounded-2xl">
 
             <h2 class="text-3xl font-semibold">Sign Up</h2>
 
@@ -55,7 +61,7 @@ onMounted(() => {
 
     registerForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        
+
         const displayName = document.querySelector('#display-name').value;
         const username = document.querySelector('#username').value;
         const email = document.querySelector('#email').value;
