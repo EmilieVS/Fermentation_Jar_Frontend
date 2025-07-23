@@ -7,7 +7,7 @@
         </div>
 
         <form id="register-form"
-            class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body bg-regular-blue text-white p-8 rounded-2xl">
+            class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body bg-regular-blue text-white-snow p-8 rounded-2xl">
 
             <h2 class="text-3xl font-semibold">Sign Up</h2>
 
@@ -40,7 +40,7 @@
             </p>
 
             <div class="flex items-center justify-center">
-                <button type="submit" class="w-1/2 bg-light-blue p-1 rounded-xl">
+                <button type="submit" class="w-1/2 bg-light-blue text-dark-blue font-semibold p-1 rounded-xl">
                     Continue
                 </button>
             </div>
