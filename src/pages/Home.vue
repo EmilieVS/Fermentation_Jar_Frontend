@@ -50,7 +50,7 @@ postList.value = [
 ]
 
 function loadAllPosts() {
-    fetch("http://localhost:8000/api/posts", {
+    fetch("http://localhost:8000/api/posts/all", {
         method: 'GET',
     })
         .then(response => response.json())
