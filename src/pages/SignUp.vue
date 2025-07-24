@@ -78,7 +78,7 @@ onMounted(() => {
                     throw data.error;
                 }
                 console.log(data);
-                auth.setToken(data.token);
+                auth.setToken(data.access_token);
                 auth.setDisplayName(data.user.displayName);
                 router.push('/home');
             })
