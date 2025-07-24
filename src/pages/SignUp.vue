@@ -67,7 +67,7 @@ onMounted(() => {
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
 
-        fetch("http://localhost:8000/api/users/register", {
+        fetch("http://localhost:8000/api/users", {
             method: 'Post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ displayName: displayName, username: username, email: email, password: password }),
@@ -77,6 +77,9 @@ onMounted(() => {
                 if (data.error) {
                     throw data.error;
                 }
+                console.log(data);
+                auth.setToken(data.token);
+                auth.setDisplayName(data.user.display_name);
                 router.push('/home');
             })
             .catch(error => {

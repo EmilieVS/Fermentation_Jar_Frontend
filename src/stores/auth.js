@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: null,
+        displayName: null
     }),
 
     getters: {
@@ -12,6 +13,9 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         setToken(token) {
             this.token = token
+        },
+        setDisplayName(displayName) {
+            this.displayName = displayName
         },
         logout() {
             fetch("http://localhost:8080/api/logout", {
