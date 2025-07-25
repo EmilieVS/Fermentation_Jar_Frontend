@@ -16,14 +16,14 @@
             <div class="flex flex-col gap-8" v-if="userInfos.user">
                 <div class="flex justify-between  items-center w-full">
                     <div class="flex flex-col">
-                        <div class="text-2xl">{{ userInfos.user.displayName }}</div>
-                        <div class="text-gray">@{{ userInfos.user.username }}</div>
+                        <div class="text-2xl">{{ userInfos.user.display_name }}</div>
+                        <div class="text-gray">@{{ userInfos.user.display_name }}</div>
                     </div>
                     <div class="flex justify-center">
-                        <button type="submit"
+                        <RouterLink to="/profile/edit"
                             class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-15 flex justify-center">
                             Edit profile
-                        </button>
+                        </RouterLink>
                     </div>
                 </div>
                 <div class="pb-5">{{ userInfos.user.bio }}</div>

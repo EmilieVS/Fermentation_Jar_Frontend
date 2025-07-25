@@ -5,12 +5,12 @@
                 <img src="../assets/icons/back_arrow_button.png" alt="Back Arrow Button" class="">
             </RouterLink>
         </div>
-        
+
         <form id="edit-form"
-        class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body text-white-snow">
+            class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body text-white-snow">
             <div class="flex justify-between">
                 <h2 class="text-3xl font-semibold">Edit profile</h2>
-                
+
                 <div class="flex justify-center">
                     <button type="submit" class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8">
                         Save
@@ -20,36 +20,36 @@
             <div class=" bg-regular-blue rounded-2xl p-8 mt-4">
                 <div class="flex flex-col gap-2">
                     <label for="display-name">Display name</label>
-                    <input id="display-name" type="text" name="display-name" placeholder="your display name" required
+                    <input id="display-name" type="text" name="display-name" placeholder="your display name" 
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
-    
-                <div class="flex flex-col gap-2 mt-4">
+
+                <!-- <div class="flex flex-col gap-2 mt-4">
                     <label for="username">Username</label>
                     <input id="username" type="text" name="username" placeholder="your username" required
                         class="rounded-xl bg-dark-blue p-2">
-                </div>
-    
+                </div> -->
+
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="email">Email</label>
-                    <input id="email" type="text" name="email" placeholder="email@example.com" required
+                    <input id="email" type="text" name="email" placeholder="email@example.com" 
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
-    
+
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="password">Password</label>
-                    <input id="password" type="password" name="password" placeholder="your password" required
+                    <input id="password" type="password" name="password" placeholder="your password" 
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
-                
+
                 <p id="register-error-message" class="hidden">
                     Invalid email or password, please try again.
                 </p>
-    
+
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
                     <textarea id="bio" name="bio" placeholder="your bio"
-                        class="rounded-xl bg-dark-blue p-2 resize-none"/>
+                        class="rounded-xl bg-dark-blue p-2 resize-none" />
                 </div>
             </div>
         </form>
@@ -71,15 +71,18 @@ onMounted(() => {
         e.preventDefault();
 
         const displayName = document.querySelector('#display-name').value;
-        const username = document.querySelector('#username').value;
+        // const username = document.querySelector('#username').value; On ne le modifie pas 
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
         const bio = document.querySelector('#bio').value;
 
         fetch("http://localhost:8000/api/users", {
             method: 'Put',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ displayName: displayName, email: email, password: password, bio: bio }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${auth.token}`
+            },
+            body: JSON.stringify({ display_name: displayName, email: email, password: password, bio: bio }),
         })
             .then(response => response.json())
             .then(data => {
@@ -88,7 +91,7 @@ onMounted(() => {
                 }
 
                 auth.setToken(data.access_token);
-                auth.setDisplayName(data.user.displayName);
+                auth.setDisplayName(data.user.display_name);
                 router.push('/profile');
             })
             .catch(error => {
@@ -98,4 +101,5 @@ onMounted(() => {
             })
     });
 });
+
 </script>

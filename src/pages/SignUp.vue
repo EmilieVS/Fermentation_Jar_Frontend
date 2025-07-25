@@ -70,7 +70,7 @@ onMounted(() => {
         fetch("http://localhost:8000/api/users", {
             method: 'Post',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ displayName: displayName, username: username, email: email, password: password }),
+            body: JSON.stringify({ display_name: displayName, username: username, email: email, password: password }),
         })
             .then(response => response.json())
             .then(data => {
@@ -78,7 +78,7 @@ onMounted(() => {
                     throw data.error;
                 }
                 auth.setToken(data.access_token);
-                auth.setDisplayName(data.user.displayName);
+                auth.setDisplayName(data.user.display_name);
                 router.push('/home');
             })
             .catch(error => {

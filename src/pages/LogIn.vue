@@ -63,7 +63,7 @@ onMounted(() => {
                     throw data.error;
                 }
                 auth.setToken(data.access_token);
-                auth.setDisplayName(data.user.displayName);
+                auth.setDisplayName(data.user.display_name);
                 router.push('/home');
             })
             .catch(error => {
