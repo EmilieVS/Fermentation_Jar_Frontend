@@ -3,7 +3,8 @@
         <section class="ml-auto mr-4 text-white-snow ">
             <div v-if="auth.token" class="flex justify-center items-center gap-2">
                 <p>Hello {{ auth.displayName }}</p>
-                <img src="../assets/icons/account_icon.png" alt="Profile Icon Light" class="w-10 h-10">
+                <RouterLink to="/profile"><img src="../assets/icons/account_icon.png" alt="Profile Icon Light" class="w-10 h-10">
+                </RouterLink>
             </div>
             <div v-else class="flex justify-center items-center gap-2">
                 <RouterLink to="/login">Login</RouterLink>
