@@ -18,18 +18,19 @@
         </header>
         <section class="pt-4 w-4/5 lg:w-1/2 text-white-snow">
             <div class="flex flex-col gap-8">
-                <div>{{userInfos.user.displayName}}</div>
-                <div>{{userInfos.user.username}}</div>
-                <div>{{userInfos.user.bio}}</div>
+                <div>{{userInfos[0].user.displayName}}</div>
+                <div>{{userInfos[0].user.username}}</div>
+                <div>{{userInfos[0].user.bio}}</div>
             </div>
+            <!-- </div> -->
         </section>
 
-        <section class="pt-4 w-4/5 lg:w-1/2">
+        <!-- <section class="pt-4 w-4/5 lg:w-1/2">
             <div class="flex flex-col gap-8">
                 <PostItem v-for="post in usersPost" :username="post.username" :description="post.description"
                     :createdAt="post.created_at" />
             </div>
-        </section>
+        </section> -->
 
     </div>
 
@@ -56,6 +57,7 @@ function getUserData() {
     
         .then(data => {
             userInfos.value = data;
+            console.log(data)
             
         })
         .catch(error => {
@@ -80,7 +82,7 @@ function loadUserPosts() {
 
 onMounted(() => {
     getUserData();
-    loadUserPosts();
+    // loadUserPosts();
 })
 
 
