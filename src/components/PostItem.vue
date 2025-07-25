@@ -9,7 +9,7 @@
         </div>
         <div class="flex justify-end">
             <p class="text-gray text-sm italic">
-                {{ new Date(props.createdAt).toLocaleString('fr-FR', {
+                {{ new Date(props.createdAt).toLocaleString('en-UK', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
