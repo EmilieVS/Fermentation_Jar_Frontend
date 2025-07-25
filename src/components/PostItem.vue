@@ -2,13 +2,13 @@
     <div class="flex flex-col">
         <div class="block mb-2">
             <p class="text-white-snow">{{ props.displayName }}</p>
-            <p class="text-gray font-light italic">@{{ props.username }}</p>
+            <p class="text-gray font-light ">@{{ props.username }}</p>
         </div>
-        <div class="block bg-regular-blue p-2 rounded-xl">
+        <div class="block bg-regular-blue p-4 rounded-xl">
             <p class="text-white-snow">{{ props.description }}</p>
         </div>
         <div class="flex justify-end">
-            <p class="text-gray text-sm italic">
+            <p class="text-gray text-sm ">
                 {{ new Date(props.createdAt).toLocaleString('en-UK', {
                     year: 'numeric',
                     month: 'long',
