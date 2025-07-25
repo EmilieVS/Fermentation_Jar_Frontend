@@ -26,7 +26,7 @@
                 Invalid email or password, please try again.
             </p>
 
-            <div class="flex items-center justify-center">
+            <div class="flex items-center justify-center mt-6">
                 <button type="submit" class="w-1/2 bg-light-blue text-dark-blue font-semibold p-1 rounded-xl">
                     Continue
                 </button>
@@ -63,7 +63,7 @@ onMounted(() => {
                     throw data.error;
                 }
                 auth.setToken(data.access_token);
-                auth.setDisplayName(data.user.display_name);
+                auth.setDisplayName(data.user.displayName);
                 router.push('/home');
             })
             .catch(error => {
