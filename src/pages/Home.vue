@@ -28,7 +28,7 @@
 
         <section class="w-4/5 lg:w-1/2">
             <div class="flex flex-col gap-8">
-                <PostItem v-for="post in postList" :id="post.id" :displayName="post.displayName"
+                <PostItem v-for="post in postList" :id="post.id" :displayName="post.display_name"
                     :username="post.username" :description="post.description" :createdAt="post.created_at" />
             </div>
         </section>

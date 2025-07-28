@@ -12,7 +12,7 @@
 
             <div class="flex flex-col gap-1">
                 <label for="email">Email</label>
-                <input id="email" type="text" name="email" placeholder="email@example.com" required
+                <input id="email" type="email" name="email" placeholder="email@example.com" required
                     class="rounded-xl bg-dark-blue p-2">
             </div>
 
@@ -63,7 +63,7 @@ onMounted(() => {
                     throw data.error;
                 }
                 auth.setToken(data.access_token);
-                auth.setDisplayName(data.user.displayName);
+                auth.setDisplayName(data.user.display_name);
                 router.push('/home');
             })
             .catch(error => {
