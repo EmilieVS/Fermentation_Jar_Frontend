@@ -57,18 +57,23 @@
             </div>
         </div>
 
-        <div v-if="showProfileModal" class="fixed top-16 sm:top-20 right-2 sm:right-4 z-50">
-            <div class="bg-regular-blue rounded-xl border border-gray-600 shadow-lg min-w-40 sm:min-w-48">
-                <RouterLink to="/profile"
-                    class="w-full px-4 sm:px-6 py-2 sm:py-3 text-center text-white-snow hover:bg-dark-blue transition-colors duration-200 rounded-t-xl border-b cursor-pointer border-gray-600 text-sm sm:text-base">
-                    My profile
-                </RouterLink>
-                <button @click="logout"
-                    class="w-full px-4 sm:px-6 py-2 sm:py-3 text-center text-white-snow cursor-pointer hover:bg-dark-blue transition-colors duration-200 rounded-b-xl text-sm sm:text-base">
-                    Log out
-                </button>
-            </div>
-        </div>
+
+<div v-if="showProfileModal" class="fixed top-16 sm:top-20 right-2 sm:right-4 z-50">
+    <div class="bg-regular-blue rounded-xl border border-gray-600 shadow-lg min-w-40 sm:min-w-48 overflow-hidden">
+        <RouterLink 
+            to="/profile"
+            class="flex items-center justify-center w-full px-4 sm:px-6 py-2 sm:py-3 text-white-snow hover:bg-dark-blue transition-colors duration-200 border-b border-gray-600 text-sm sm:text-base font-medium"
+        >
+            My profile
+        </RouterLink>
+        <button 
+            @click="logout"
+            class="flex items-center justify-center w-full px-4 sm:px-6 py-2 sm:py-3 text-white-snow hover:bg-dark-blue transition-colors duration-200 text-sm sm:text-base font-medium"
+        >
+            Log out
+        </button>
+    </div>
+</div>
 
         <div v-if="showProfileModal" class="fixed inset-0 z-40" @click="closeProfileModal"></div>
 
@@ -92,7 +97,7 @@ function loadAllPosts() {
     })
         .then(response => response.json())
         .then(data => {
-            postList.value = data;
+            postList.value = data.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
         })
         .catch(error => {
             console.log(error);

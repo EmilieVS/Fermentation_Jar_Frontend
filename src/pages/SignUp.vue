@@ -40,7 +40,7 @@
             </p>
 
             <div class="flex items-center justify-center mt-6">
-                <button type="submit" class="w-1/2 bg-light-blue text-dark-blue font-semibold p-1 rounded-xl">
+                <button type="submit" class="w-1/2 bg-light-blue text-dark-blue font-semibold p-1 rounded-xl cursor-pointer">
                     Continue
                 </button>
             </div>
