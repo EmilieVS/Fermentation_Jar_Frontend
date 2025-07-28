@@ -6,7 +6,7 @@
                 <img src="../assets/icons/back_arrow_button.png" alt="Back Arrow Button" class="">
             </RouterLink>
         </div>
-        <section class="ml-auto mr-4 text-white-snow absolute top-4 right-4">
+        <section class="ml-auto mr-4 text-white-snow">
             <div class="flex justify-center items-center gap-2">
                 <p>Hello {{ auth.displayName }}</p>
                 <img src="../assets/icons/account_icon.png" alt="Profile Icon Light" class="w-10 h-10">
@@ -42,16 +42,16 @@
 </template>
 
 <script setup>
-
 import PostItem from '../components/PostItem.vue';
 import { useAuthStore } from '../stores/auth';
+import { useUserStore } from '../stores/user';
 import { ref, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const auth = useAuthStore();
+const user = useUserStore();
 const userInfos = ref({});
 const usersPost = ref([]);
-
 
 function getUserData() {
     fetch(`http://localhost:8000/api/user`, {
@@ -62,13 +62,12 @@ function getUserData() {
 
         .then(data => {
             userInfos.value = data;
-            console.log(data)
-
+            console.log(data);
+            user.setUser(data.user);
         })
         .catch(error => {
             console.log(error);
         });
-
 }
 
 function loadUserPosts() {
@@ -89,6 +88,4 @@ onMounted(() => {
     getUserData();
     loadUserPosts();
 })
-
-
 </script>

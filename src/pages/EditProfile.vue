@@ -52,22 +52,32 @@
 
 <script setup>
 import { useAuthStore } from '../stores/auth';
+import { useUserStore } from '../stores/user';
 import router from '../router/index.js';
 import { onMounted } from 'vue';
 
 const auth = useAuthStore();
+const user = useUserStore();
+const displayName = document.querySelector('#display-name').value;
+const email = document.querySelector('#email').value;
+const password = document.querySelector('#password').value;
+const bio = document.querySelector('#bio').value;
 
 onMounted(() => {
     const editForm = document.querySelector('#edit-form');
     const registerErrorMessage = document.querySelector('#register-error-message');
 
+    displayName = user.user.display_name;
+    email = user.user.display_name;
+    displayName = user.user.display_name;
+    displayName = user.user.display_name;
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const displayName = document.querySelector('#display-name').value.trim();
-        const email = document.querySelector('#email').value.trim();
-        const password = document.querySelector('#password').value.trim();
-        const bio = document.querySelector('#bio').value.trim();
+        displayName.trim();
+        email.trim();
+        password.trim();
+        bio.trim();
 
         const bodyRequest = {};
         if (displayName) bodyRequest.display_name = displayName;
@@ -88,7 +98,6 @@ onMounted(() => {
                 if (data.error) {
                     throw data.error;
                 }
-                console.log(data);
                 auth.setDisplayName(data.user?.display_name || '');
                 router.push('/profile');
             })
@@ -99,5 +108,4 @@ onMounted(() => {
             })
     });
 });
-
 </script>
