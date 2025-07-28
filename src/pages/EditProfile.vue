@@ -23,13 +23,7 @@
                     <input id="display-name" type="text" name="display-name" placeholder="your display name" 
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
-
-                <!-- <div class="flex flex-col gap-2 mt-4">
-                    <label for="username">Username</label>
-                    <input id="username" type="text" name="username" placeholder="your username" required
-                        class="rounded-xl bg-dark-blue p-2">
-                </div> -->
-
+                
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="email">Email</label>
                     <input id="email" type="text" name="email" placeholder="email@example.com" 
@@ -71,7 +65,6 @@ onMounted(() => {
         e.preventDefault();
 
         const displayName = document.querySelector('#display-name').value;
-        // const username = document.querySelector('#username').value; On ne le modifie pas 
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
         const bio = document.querySelector('#bio').value;
@@ -89,8 +82,8 @@ onMounted(() => {
                 if (data.error) {
                     throw data.error;
                 }
-
-                auth.setToken(data.access_token);
+                console.log(data);
+                // il renvoie pas ces données pas de display name si pas mis coté client, pb vient du userController
                 auth.setDisplayName(data.user.display_name);
                 router.push('/profile');
             })
