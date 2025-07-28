@@ -20,19 +20,19 @@
             <div class=" bg-regular-blue rounded-2xl p-8 mt-4">
                 <div class="flex flex-col gap-2">
                     <label for="display-name">Display name</label>
-                    <input id="display-name" type="text" name="display-name" placeholder="your display name" 
+                    <input id="display-name" type="text" name="display-name" placeholder="your display name"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="email">Email</label>
-                    <input id="email" type="email" name="email" placeholder="email@example.com" 
+                    <input id="email" type="email" name="email" placeholder="email@example.com"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="password">Password</label>
-                    <input id="password" type="password" name="password" placeholder="your password" 
+                    <input id="password" type="password" name="password" placeholder="your password"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
@@ -45,6 +45,13 @@
                     <textarea id="bio" name="bio" placeholder="your bio"
                         class="rounded-xl bg-dark-blue p-2 resize-none" />
                 </div>
+
+                <div class="flex justify-center mt-6">
+                    <button @click="deleteAccount" type="button"
+                        class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8">
+                        Delete Account
+                    </button>
+                </div>
             </div>
         </form>
     </div>
@@ -54,6 +61,7 @@
 import { useAuthStore } from '../stores/auth';
 import router from '../router/index.js';
 import { onMounted } from 'vue';
+// import { json } from 'stream/consumers';
 
 const auth = useAuthStore();
 
@@ -99,5 +107,36 @@ onMounted(() => {
             })
     });
 });
+
+
+function deleteAccount() {
+
+    fetch(`http://localhost:8000/api/user`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${auth.token}`
+        },
+
+    })
+
+        .then(response => response.json())
+
+        .then(data => {
+            if (data.error) {
+                throw data.error;
+            }
+            auth.setToken(null);
+            auth.setDisplayName(null);
+            console.log(data.message);
+            router.push('/home');
+        })
+
+        .catch(error => {
+            console.log(error);
+
+        })
+}
+
 
 </script>
