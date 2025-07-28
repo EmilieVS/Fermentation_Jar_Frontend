@@ -54,7 +54,7 @@ const usersPost = ref([]);
 
 
 function getUserData() {
-    fetch(`http://localhost:8000/api/users`, {
+    fetch(`http://localhost:8000/api/user`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${auth.token}` }
     })
@@ -72,7 +72,7 @@ function getUserData() {
 }
 
 function loadUserPosts() {
-    fetch("http://localhost:8000/api/posts", {
+    fetch("http://localhost:8000/api/user/post", {
         method: 'GET',
         headers: { Authorization: `Bearer ${auth.token}` }
     })

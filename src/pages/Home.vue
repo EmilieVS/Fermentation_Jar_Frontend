@@ -87,7 +87,7 @@ const postContent = ref('');
 const showProfileModal = ref(false);
 
 function loadAllPosts() {
-    fetch("http://localhost:8000/api/posts/all", {
+    fetch("http://localhost:8000/api/post", {
         method: 'GET',
     })
         .then(response => response.json())
@@ -125,12 +125,7 @@ function createPost() {
 
     const postContent = document.querySelector('#post-content').value
 
-    // if (!postContent.trim() || postContent.trim().length < 50) {
-    //     return;
-    // }
-
-
-    fetch("http://localhost:8000/api/posts", {
+    fetch("http://localhost:8000/api/post", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -75,7 +75,7 @@ onMounted(() => {
         if (password) bodyRequest.password = password;
         if (bio) bodyRequest.bio = bio;
 
-        fetch("http://localhost:8000/api/users", {
+        fetch("http://localhost:8000/api/user", {
             method: 'Put',
             headers: {
                 'Content-Type': 'application/json',

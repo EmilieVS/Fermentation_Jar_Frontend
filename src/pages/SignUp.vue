@@ -67,7 +67,7 @@ onMounted(() => {
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
 
-        fetch("http://localhost:8000/api/users", {
+        fetch("http://localhost:8000/api/user", {
             method: 'Post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ display_name: displayName, username: username, email: email, password: password }),
