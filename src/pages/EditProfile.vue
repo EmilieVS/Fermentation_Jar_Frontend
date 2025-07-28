@@ -23,10 +23,10 @@
                     <input id="display-name" type="text" name="display-name" placeholder="your display name" 
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
-                
+
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="email">Email</label>
-                    <input id="email" type="text" name="email" placeholder="email@example.com" 
+                    <input id="email" type="email" name="email" placeholder="email@example.com" 
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
@@ -64,10 +64,16 @@ onMounted(() => {
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const displayName = document.querySelector('#display-name').value;
-        const email = document.querySelector('#email').value;
-        const password = document.querySelector('#password').value;
-        const bio = document.querySelector('#bio').value;
+        const displayName = document.querySelector('#display-name').value.trim();
+        const email = document.querySelector('#email').value.trim();
+        const password = document.querySelector('#password').value.trim();
+        const bio = document.querySelector('#bio').value.trim();
+
+        const bodyRequest = {};
+        if (displayName) bodyRequest.display_name = displayName;
+        if (email) bodyRequest.email = email;
+        if (password) bodyRequest.password = password;
+        if (bio) bodyRequest.bio = bio;
 
         fetch("http://localhost:8000/api/users", {
             method: 'Put',
@@ -75,7 +81,7 @@ onMounted(() => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${auth.token}`
             },
-            body: JSON.stringify({ display_name: displayName, email: email, password: password, bio: bio }),
+            body: JSON.stringify(bodyRequest),
         })
             .then(response => response.json())
             .then(data => {
@@ -83,8 +89,7 @@ onMounted(() => {
                     throw data.error;
                 }
                 console.log(data);
-                // il renvoie pas ces données pas de display name si pas mis coté client, pb vient du userController
-                auth.setDisplayName(data.user.display_name);
+                auth.setDisplayName(data.user?.display_name || '');
                 router.push('/profile');
             })
             .catch(error => {

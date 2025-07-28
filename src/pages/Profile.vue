@@ -17,7 +17,7 @@
                 <div class="flex justify-between  items-center w-full">
                     <div class="flex flex-col">
                         <div class="text-2xl">{{ userInfos.user.display_name }}</div>
-                        <div class="text-gray">@{{ userInfos.user.display_name }}</div>
+                        <div class="text-gray">@{{ userInfos.user.username }}</div>
                     </div>
                     <div class="flex justify-center">
                         <RouterLink to="/profile/edit"

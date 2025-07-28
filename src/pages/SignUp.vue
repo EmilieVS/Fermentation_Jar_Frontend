@@ -12,25 +12,25 @@
             <h2 class="text-3xl font-semibold">Sign Up</h2>
 
             <div class="flex flex-col gap-1">
-                <label for="display-name">Display name</label>
+                <label for="display-name">Display name*</label>
                 <input id="display-name" type="text" name="display-name" placeholder="your display name" required
                     class="rounded-xl bg-dark-blue p-2">
             </div>
 
             <div class="flex flex-col gap-1">
-                <label for="username">Username</label>
+                <label for="username">Username*</label>
                 <input id="username" type="text" name="username" placeholder="your username" required
                     class="rounded-xl bg-dark-blue p-2">
             </div>
 
             <div class="flex flex-col gap-1">
-                <label for="email">Email</label>
-                <input id="email" type="text" name="email" placeholder="email@example.com" required
+                <label for="email">Email*</label>
+                <input id="email" type="email" name="email" placeholder="email@example.com" required
                     class="rounded-xl bg-dark-blue p-2">
             </div>
 
             <div class="flex flex-col gap-1">
-                <label for="password">Password</label>
+                <label for="password">Password*</label>
                 <input id="password" type="password" name="password" placeholder="your password" required
                     class="rounded-xl bg-dark-blue p-2">
             </div>
