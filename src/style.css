@@ -7,6 +7,12 @@
     src: url(./assets/fonts/hk-grotesk.regular.ttf);
 }
 
+@font-face {
+    font-family: "Space Mono Regular";
+    src: url(./assets/fonts/SpaceMono-Regular.ttf);
+}
+
+
 /* Design Tokens */
 @theme {
     /* Colors */
@@ -18,4 +24,5 @@
 
     /* Font Families */
     --font-body: "HK Grotesk Regular", serif;
+    --font-figures: "Space Mono Regular", serif;
 }
