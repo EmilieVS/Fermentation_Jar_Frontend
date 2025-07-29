@@ -45,11 +45,17 @@
                 </div>
                 <div class="p-4 sm:p-6">
                     <div class="relative mb-4 sm:mb-6">
-                        <textarea id="post-content" placeholder="What's on your mind?"
+                        <textarea id="post-content" @input="updateCharacterCount" placeholder="What's on your mind?"
                             class="w-full bg-dark-blue border border-gray-600 rounded-xl px-3 sm:px-4 py-3 text-white-snow placeholder-gray resize-none focus:outline-none focus:ring-1 focus:ring-white-snow focus:border-transparent text-sm sm:text-base"
-                            rows="4"></textarea>
+                            rows="4" minlength="20" maxlength="300"></textarea>
+                        <div class="flex justify-end mt-3">
+                            <span class="font-figures text-xs text-white-snow">
+                                {{ characterCount }}/300
+                            </span>
+                        </div>
                     </div>
-                    <button @click="createPost"
+
+                    <button @click="createPost" :disabled="characterCount < 20"
                         class="w-full bg-light-blue text-dark-blue font-semibold py-3 rounded-xl cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base">
                         Post
                     </button>
@@ -58,22 +64,19 @@
         </div>
 
 
-<div v-if="showProfileModal" class="fixed top-16 sm:top-20 right-2 sm:right-4 z-50">
-    <div class="bg-regular-blue rounded-xl border border-gray-600 shadow-lg min-w-40 sm:min-w-48 overflow-hidden">
-        <RouterLink 
-            to="/profile"
-            class="flex items-center justify-center w-full px-4 sm:px-6 py-2 sm:py-3 text-white-snow hover:bg-dark-blue transition-colors duration-200 border-b border-gray-600 text-sm sm:text-base font-medium"
-        >
-            My profile
-        </RouterLink>
-        <button 
-            @click="logout"
-            class="flex items-center justify-center w-full px-4 sm:px-6 py-2 sm:py-3 text-white-snow hover:bg-dark-blue transition-colors duration-200 text-sm sm:text-base font-medium"
-        >
-            Log out
-        </button>
-    </div>
-</div>
+        <div v-if="showProfileModal" class="fixed top-16 sm:top-20 right-2 sm:right-4 z-50">
+            <div
+                class="bg-regular-blue rounded-xl border border-gray-600 shadow-lg min-w-40 sm:min-w-48 overflow-hidden">
+                <RouterLink to="/profile"
+                    class="flex items-center justify-center w-full px-4 sm:px-6 py-2 sm:py-3 text-white-snow hover:bg-dark-blue transition-colors duration-200 border-b border-gray-600 text-sm sm:text-base font-medium">
+                    My profile
+                </RouterLink>
+                <button @click="logout"
+                    class="flex items-center justify-center w-full px-4 sm:px-6 py-2 sm:py-3 text-white-snow hover:bg-dark-blue transition-colors duration-200 text-sm sm:text-base font-medium">
+                    Log out
+                </button>
+            </div>
+        </div>
 
         <div v-if="showProfileModal" class="fixed inset-0 z-40" @click="closeProfileModal"></div>
 
@@ -90,6 +93,7 @@ const postList = ref([]);
 const showPostModal = ref(false);
 const postContent = ref('');
 const showProfileModal = ref(false);
+const characterCount = ref(0);
 
 function loadAllPosts() {
     fetch("http://localhost:8000/api/post", {
@@ -97,7 +101,7 @@ function loadAllPosts() {
     })
         .then(response => response.json())
         .then(data => {
-            postList.value = data.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+            postList.value = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         })
         .catch(error => {
             console.log(error);
@@ -123,7 +127,13 @@ function openPostModal() {
 
 function closePostModal() {
     showPostModal.value = false;
+    characterCount.value = 0;
     postContent.value = '';
+}
+
+function updateCharacterCount() {
+    const textarea = document.querySelector('#post-content');
+    characterCount.value = textarea.value.length;
 }
 
 function createPost() {

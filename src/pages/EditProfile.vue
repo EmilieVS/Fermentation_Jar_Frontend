@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col justify-center items-center h-screen bg-dark-blue">
         <div class="absolute top-3 left-3 h-10 w-10">
-            <RouterLink to="/Profile">
+            <RouterLink to="/profile">
                 <img src="../assets/icons/back_arrow_button.png" alt="Back Arrow Button" class="">
             </RouterLink>
         </div>
@@ -20,19 +20,19 @@
             <div class=" bg-regular-blue rounded-2xl p-8 mt-4">
                 <div class="flex flex-col gap-2">
                     <label for="display-name">Display name</label>
-                    <input id="display-name" type="text" name="display-name" placeholder="your display name" 
+                    <input v-model="displayName" type="text" name="display-name" placeholder="your display name"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="email">Email</label>
-                    <input id="email" type="email" name="email" placeholder="email@example.com" 
+                    <input v-model="email" type="email" name="email" placeholder="email@example.com"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="password">Password</label>
-                    <input id="password" type="password" name="password" placeholder="your password" 
+                    <input v-model="password" type="password" name="password" placeholder="your password"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
@@ -42,8 +42,15 @@
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
-                    <textarea id="bio" name="bio" placeholder="your bio"
-                        class="rounded-xl bg-dark-blue p-2 resize-none" />
+                    <textarea v-model="bio" name="bio" placeholder="your bio"
+                        class="rounded-xl bg-dark-blue p-2 h-20 resize-none" />
+                </div>
+
+                <div class="flex justify-center mt-6">
+                    <button @click="deleteAccount" type="button"
+                        class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8">
+                        Delete Account
+                    </button>
                 </div>
             </div>
         </form>
@@ -54,36 +61,32 @@
 import { useAuthStore } from '../stores/auth';
 import { useUserStore } from '../stores/user';
 import router from '../router/index.js';
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const auth = useAuthStore();
 const user = useUserStore();
-const displayName = document.querySelector('#display-name').value;
-const email = document.querySelector('#email').value;
-const password = document.querySelector('#password').value;
-const bio = document.querySelector('#bio').value;
+const displayName = ref('');
+const email = ref('');
+const password = ref('');
+const bio = ref('');
 
 onMounted(() => {
     const editForm = document.querySelector('#edit-form');
     const registerErrorMessage = document.querySelector('#register-error-message');
 
-    displayName = user.user.display_name;
-    email = user.user.display_name;
-    displayName = user.user.display_name;
-    displayName = user.user.display_name;
+    console.log(user.user)
+    displayName.value = user.user.displayName;
+    email.value = user.user.email;
+    bio.value = user.user.bio;
+    
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        displayName.trim();
-        email.trim();
-        password.trim();
-        bio.trim();
-
         const bodyRequest = {};
-        if (displayName) bodyRequest.display_name = displayName;
-        if (email) bodyRequest.email = email;
-        if (password) bodyRequest.password = password;
-        if (bio) bodyRequest.bio = bio;
+        if (displayName.value) bodyRequest.display_name = displayName.value;
+        if (email.value) bodyRequest.email = email.value;
+        if (password.value) bodyRequest.password = password.value;
+        if (bio.value) bodyRequest.bio = bio.value;
 
         fetch("http://localhost:8000/api/user", {
             method: 'Put',
@@ -108,4 +111,35 @@ onMounted(() => {
             })
     });
 });
+
+
+function deleteAccount() {
+
+    fetch(`http://localhost:8000/api/user`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${auth.token}`
+        },
+
+    })
+
+        .then(response => response.json())
+
+        .then(data => {
+            if (data.error) {
+                throw data.error;
+            }
+            auth.setToken(null);
+            auth.setDisplayName(null);
+            router.push('/home');
+        })
+
+        .catch(error => {
+            console.log(error);
+
+        })
+}
+
+
 </script>
