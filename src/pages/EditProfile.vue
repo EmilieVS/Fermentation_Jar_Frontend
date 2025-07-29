@@ -39,7 +39,7 @@
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
                     <textarea v-model="bio" name="bio" placeholder="your bio"
-                    class="rounded-xl bg-dark-blue p-2 resize-none" />
+                        class="rounded-xl bg-dark-blue p-2 h-20 resize-none" />
                 </div>
                 
                 <p id="edit-error-message" class="hidden">
@@ -59,31 +59,33 @@
 
 <script setup>
 import { useAuthStore } from '../stores/auth';
-import router from '../router/index.js';
-import { onMounted, ref } from 'vue';
-
+import { useUserStore } from '../stores/user';
+import router from '../router/index.js
+import { ref, onMounted } from 'vue';
 
 const auth = useAuthStore();
-const errorMessage = ref("");
-
+const user = useUserStore();
+const displayName = ref('');
+const email = ref('');
+const password = ref('');
+const bio = ref('');
 
 onMounted(() => {
     const editForm = document.querySelector('#edit-form');
     const editErrorMessage = document.querySelector('#edit-error-message');
 
+    displayName.value = user.user.displayName;
+    email.value = user.user.email;
+    bio.value = user.user.bio;
+    
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const displayName = document.querySelector('#display-name').value.trim();
-        const email = document.querySelector('#email').value.trim();
-        const password = document.querySelector('#password').value.trim();
-        const bio = document.querySelector('#bio').value.trim();
-
         const bodyRequest = {};
-        if (displayName) bodyRequest.display_name = displayName;
-        if (email) bodyRequest.email = email;
-        if (password) bodyRequest.password = password;
-        if (bio) bodyRequest.bio = bio;
+        if (displayName.value) bodyRequest.display_name = displayName.value;
+        if (email.value) bodyRequest.email = email.value;
+        if (password.value) bodyRequest.password = password.value;
+        if (bio.value) bodyRequest.bio = bio.value;
 
         fetch("http://localhost:8000/api/user", {
             method: 'PUT',
@@ -115,9 +117,7 @@ onMounted(() => {
     });
 });
 
-
 function deleteAccount() {
-    
     const editErrorMessage = document.querySelector('#edit-error-message');
 
     fetch(`http://localhost:8000/api/user`, {
@@ -127,7 +127,6 @@ function deleteAccount() {
             'Accept': 'application/json',
             'Authorization': `Bearer ${auth.token}`
         },
-
     })
         .then(response => {
             if (!response.ok) {
@@ -149,6 +148,4 @@ function deleteAccount() {
             editErrorMessage.classList.add('block');
         })
 }
-
-
 </script>
