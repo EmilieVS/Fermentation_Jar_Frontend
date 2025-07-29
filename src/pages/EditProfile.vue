@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col justify-center items-center h-screen bg-dark-blue">
         <div class="absolute top-3 left-3 h-10 w-10">
-            <RouterLink to="/Profile">
+            <RouterLink to="/profile">
                 <img src="../assets/icons/back_arrow_button.png" alt="Back Arrow Button" class="">
             </RouterLink>
         </div>
@@ -12,44 +12,44 @@
                 <h2 class="text-3xl font-semibold">Edit profile</h2>
 
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8">
-                        Save
+                    <button @click="deleteAccount" type="button" class="bg-red-900 text-white-snow font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                        Delete account
                     </button>
                 </div>
             </div>
             <div class=" bg-regular-blue rounded-2xl p-8 mt-4">
                 <div class="flex flex-col gap-2">
                     <label for="display-name">Display name</label>
-                    <input id="display-name" type="text" name="display-name" placeholder="your display name"
+                    <input v-model="displayName" type="text" name="display-name" placeholder="your display name"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="email">Email</label>
-                    <input id="email" type="email" name="email" placeholder="email@example.com"
+                    <input v-model="email" type="email" name="email" placeholder="email@example.com"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="password">Password</label>
-                    <input id="password" type="password" name="password" placeholder="your password"
+                    <input v-model="password" type="password" name="password" placeholder="your password"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
-
-                <p id="register-error-message" class="hidden">
-                    Invalid email or password, please try again.
-                </p>
-
+ 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
-                    <textarea id="bio" name="bio" placeholder="your bio"
-                        class="rounded-xl bg-dark-blue p-2 resize-none" />
+                    <textarea v-model="bio" name="bio" placeholder="your bio"
+                    class="rounded-xl bg-dark-blue p-2 resize-none" />
                 </div>
+                
+                <p id="edit-error-message" class="hidden">
+                    {{ errorMessage }}
+                </p>
 
                 <div class="flex justify-center mt-6">
-                    <button @click="deleteAccount" type="button"
-                        class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8">
-                        Delete Account
+                    <button type="submit"
+                    class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                    Save
                     </button>
                 </div>
             </div>
@@ -60,14 +60,16 @@
 <script setup>
 import { useAuthStore } from '../stores/auth';
 import router from '../router/index.js';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 
 const auth = useAuthStore();
+const errorMessage = ref("");
+
 
 onMounted(() => {
     const editForm = document.querySelector('#edit-form');
-    const registerErrorMessage = document.querySelector('#register-error-message');
+    const editErrorMessage = document.querySelector('#edit-error-message');
 
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -84,57 +86,67 @@ onMounted(() => {
         if (bio) bodyRequest.bio = bio;
 
         fetch("http://localhost:8000/api/user", {
-            method: 'Put',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${auth.token}`
             },
             body: JSON.stringify(bodyRequest),
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw data.error;
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw errorData;
+                    });
                 }
-                console.log(data);
+                return response.json();
+            })
+            .then(data => {
                 auth.setDisplayName(data.user?.display_name || '');
                 router.push('/profile');
             })
             .catch(error => {
                 console.log(error);
-                registerErrorMessage.classList.remove('hidden');
-                registerErrorMessage.classList.add('block');
+                errorMessage.value = error.message;
+                editErrorMessage.classList.remove('hidden');
+                editErrorMessage.classList.add('block');
             })
     });
 });
 
 
 function deleteAccount() {
+    
+    const editErrorMessage = document.querySelector('#edit-error-message');
 
     fetch(`http://localhost:8000/api/user`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': `Bearer ${auth.token}`
         },
 
     })
-
-        .then(response => response.json())
-
-        .then(data => {
-            if (data.error) {
-                throw data.error;
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw errorData;
+                });
             }
+            return response.json();
+        })
+        .then(data => {
             auth.setToken(null);
             auth.setDisplayName(null);
-            console.log(data.message);
             router.push('/home');
         })
-
         .catch(error => {
             console.log(error);
-
+            errorMessage.value = error.message;
+            editErrorMessage.classList.remove('hidden');
+            editErrorMessage.classList.add('block');
         })
 }
 

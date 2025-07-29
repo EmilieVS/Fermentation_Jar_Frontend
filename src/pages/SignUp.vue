@@ -70,14 +70,16 @@ onMounted(() => {
         const password = document.querySelector('#password').value;
 
         fetch("http://localhost:8000/api/user", {
-            method: 'Post',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json' 
+            },
             body: JSON.stringify({ display_name: displayName, username: username, email: email, password: password }),
         })
             .then(response => {
                 if (!response.ok) {
                     return response.json().then(errorData => {
-                        console.log(errorData);
                         throw errorData;
                     });
                 }
