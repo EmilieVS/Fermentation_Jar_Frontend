@@ -23,11 +23,12 @@
             </div>
 
             <p id="login-error-message" class="hidden">
-                Invalid email or password, please try again.
+                {{ errorMessage }}
             </p>
 
             <div class="flex items-center justify-center mt-6">
-                <button type="submit" class="w-1/2 bg-light-blue text-dark-blue font-semibold p-1 rounded-xl cursor-pointer">
+                <button type="submit"
+                    class="w-1/2 bg-light-blue text-dark-blue font-semibold p-1 rounded-xl cursor-pointer">
                     Continue
                 </button>
             </div>
@@ -38,9 +39,10 @@
 <script setup>
 import { useAuthStore } from '../stores/auth';
 import router from '../router/index.js';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const auth = useAuthStore();
+const errorMessage = ref("");
 
 onMounted(() => {
     const loginForm = document.querySelector('#login-form');
@@ -53,21 +55,29 @@ onMounted(() => {
         const password = document.querySelector('#password').value;
 
         fetch("http://localhost:8000/api/login", {
-            method: 'Post',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
             body: JSON.stringify({ email: email, password: password }),
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw data.error;
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw errorData;
+                    });
                 }
+                return response.json();
+            })
+            .then(data => {
                 auth.setToken(data.access_token);
                 auth.setDisplayName(data.user.display_name);
                 router.push('/home');
             })
             .catch(error => {
                 console.log(error);
+                errorMessage.value = error.message;
                 loginErrorMessage.classList.remove('hidden');
                 loginErrorMessage.classList.add('block');
             })

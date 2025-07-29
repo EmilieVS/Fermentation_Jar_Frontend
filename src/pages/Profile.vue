@@ -21,7 +21,7 @@
                     </div>
                     <div class="flex justify-center w-1/2">
                         <RouterLink to="/profile/edit"
-                            class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-15 flex text-center">
+                            class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-15 flex justify-center cursor-pointer">
                             Edit profile
                         </RouterLink>
                     </div>

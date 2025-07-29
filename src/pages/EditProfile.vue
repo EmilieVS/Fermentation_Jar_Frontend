@@ -12,8 +12,8 @@
                 <h2 class="text-3xl font-semibold">Edit profile</h2>
 
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8">
-                        Save
+                    <button @click="deleteAccount" type="button" class="bg-red-900 text-white-snow font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                        Delete account
                     </button>
                 </div>
             </div>
@@ -35,21 +35,21 @@
                     <input v-model="password" type="password" name="password" placeholder="your password"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
-
-                <p id="register-error-message" class="hidden">
-                    Invalid email or password, please try again.
-                </p>
-
+ 
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
                     <textarea v-model="bio" name="bio" placeholder="your bio"
                         class="rounded-xl bg-dark-blue p-2 h-20 resize-none" />
                 </div>
+                
+                <p id="edit-error-message" class="hidden">
+                    {{ errorMessage }}
+                </p>
 
                 <div class="flex justify-center mt-6">
-                    <button @click="deleteAccount" type="button"
-                        class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8">
-                        Delete Account
+                    <button type="submit"
+                    class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                    Save
                     </button>
                 </div>
             </div>
@@ -72,9 +72,8 @@ const bio = ref('');
 
 onMounted(() => {
     const editForm = document.querySelector('#edit-form');
-    const registerErrorMessage = document.querySelector('#register-error-message');
+    const editErrorMessage = document.querySelector('#edit-error-message');
 
-    console.log(user.user)
     displayName.value = user.user.displayName;
     email.value = user.user.email;
     bio.value = user.user.bio;
@@ -89,48 +88,64 @@ onMounted(() => {
         if (bio.value) bodyRequest.bio = bio.value;
 
         fetch("http://localhost:8000/api/user", {
-            method: 'Put',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${auth.token}`
             },
             body: JSON.stringify(bodyRequest),
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw data.error;
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw errorData;
+                    });
                 }
+                return response.json();
+            })
+            .then(data => {
                 auth.setDisplayName(data.user?.display_name || '');
                 router.push('/profile');
             })
             .catch(error => {
                 console.log(error);
-                registerErrorMessage.classList.remove('hidden');
-                registerErrorMessage.classList.add('block');
+                errorMessage.value = error.message;
+                editErrorMessage.classList.remove('hidden');
+                editErrorMessage.classList.add('block');
             })
     });
 });
 
 function deleteAccount() {
+    const editErrorMessage = document.querySelector('#edit-error-message');
+
     fetch(`http://localhost:8000/api/user`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': `Bearer ${auth.token}`
         },
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                throw data.error;
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw errorData;
+                });
             }
+            return response.json();
+        })
+        .then(data => {
             auth.setToken(null);
             auth.setDisplayName(null);
             router.push('/home');
         })
         .catch(error => {
             console.log(error);
+            errorMessage.value = error.message;
+            editErrorMessage.classList.remove('hidden');
+            editErrorMessage.classList.add('block');
         })
 }
 </script>
