@@ -6,20 +6,14 @@
                 <img src="../assets/icons/back_arrow_button.png" alt="Back Arrow Button" class="">
             </RouterLink>
         </div>
-        <section class="ml-auto mr-4 text-white-snow">
-            <div class="flex justify-center items-center gap-2">
-                <p>Hello {{ auth.displayName }}</p>
-                <img src="../assets/icons/account_icon.png" alt="Profile Icon Light" class="w-10 h-10">
-            </div>
-        </section>
         <section class="pt-4 w-4/5 lg:w-1/2 text-white-snow">
             <div class="flex flex-col gap-8" v-if="userInfos.user">
                 <div class="flex justify-between items-center w-full">
-                    <div class="flex flex-col w-1/2">
+                    <div class="flex flex-col">
                         <div class="text-2xl break-words">{{ userInfos.user.display_name }}</div>
                         <div class="text-gray break-words">@{{ userInfos.user.username }}</div>
                     </div>
-                    <div class="flex justify-center w-1/2">
+                    <div class="flex justify-center">
                         <RouterLink to="/profile/edit"
                             class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-15 flex justify-center cursor-pointer">
                             Edit profile

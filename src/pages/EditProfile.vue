@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col justify-center items-center h-screen bg-dark-blue">
+    <div class="flex flex-col justify-center items-center min-h-screen bg-dark-blue">
         <div class="absolute top-3 left-3 h-10 w-10">
             <RouterLink to="/profile">
                 <img src="../assets/icons/back_arrow_button.png" alt="Back Arrow Button" class="">
@@ -7,7 +7,7 @@
         </div>
 
         <form id="edit-form"
-            class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body text-white-snow">
+            class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body text-white-snow pt-8 pb-8">
             <div class="flex justify-between">
                 <h2 class="text-3xl font-semibold">Edit profile</h2>
 
@@ -60,7 +60,7 @@
 <script setup>
 import { useAuthStore } from '../stores/auth';
 import { useUserStore } from '../stores/user';
-import router from '../router/index.js
+import router from '../router/index.js';
 import { ref, onMounted } from 'vue';
 
 const auth = useAuthStore();
