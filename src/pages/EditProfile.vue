@@ -60,7 +60,7 @@
 <script setup>
 import { useAuthStore } from '../stores/auth';
 import { useUserStore } from '../stores/user';
-import router from '../router/index.js';
+import router from '../router/index.js
 import { ref, onMounted } from 'vue';
 
 const auth = useAuthStore();
@@ -112,20 +112,15 @@ onMounted(() => {
     });
 });
 
-
 function deleteAccount() {
-
     fetch(`http://localhost:8000/api/user`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${auth.token}`
         },
-
     })
-
         .then(response => response.json())
-
         .then(data => {
             if (data.error) {
                 throw data.error;
@@ -134,12 +129,8 @@ function deleteAccount() {
             auth.setDisplayName(null);
             router.push('/home');
         })
-
         .catch(error => {
             console.log(error);
-
         })
 }
-
-
 </script>
