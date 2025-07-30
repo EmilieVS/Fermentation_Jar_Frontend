@@ -12,7 +12,8 @@
                 <h2 class="text-3xl font-semibold">Edit profile</h2>
 
                 <div class="flex justify-center">
-                    <button @click="deleteAccount" type="button" class="bg-red-900 text-white-snow font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                    <button @click="deleteAccount" type="button"
+                        class="bg-red-900 text-white-snow font-semibold p-1 rounded-xl px-8 cursor-pointer">
                         Delete account
                     </button>
                 </div>
@@ -35,21 +36,29 @@
                     <input v-model="password" type="password" name="password" placeholder="your password"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
- 
+
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
                     <textarea v-model="bio" name="bio" placeholder="your bio"
                         class="rounded-xl bg-dark-blue p-2 h-20 resize-none" />
                 </div>
-                
+
+                <div>
+                    <label for="profile_picture">Profile Picture</label>
+                    <input type="file" name="profile_picture" id="profile_picture" enctype="multipart/form-data"
+                        @change="handleProfilePictureChange">
+                    <img v-if="picturePreview" :src="picturePreview" alt="Profile Picture" width="200" />
+                    <p v-else>No profile picture uploaded.</p>
+                </div>
+
                 <p id="edit-error-message" class="hidden">
                     {{ errorMessage }}
                 </p>
 
                 <div class="flex justify-center mt-6">
                     <button type="submit"
-                    class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8 cursor-pointer">
-                    Save
+                        class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                        Save
                     </button>
                 </div>
             </div>
@@ -62,6 +71,8 @@ import { useAuthStore } from '../stores/auth';
 import { useUserStore } from '../stores/user';
 import router from '../router/index.js';
 import { ref, onMounted } from 'vue';
+import { computed } from 'vue'
+import { defineProps } from 'vue'
 
 const auth = useAuthStore();
 const user = useUserStore();
@@ -69,6 +80,19 @@ const displayName = ref('');
 const email = ref('');
 const password = ref('');
 const bio = ref('');
+const profilePicture = ref(null)
+const picturePreview = ref(null)
+
+function handleProfilePictureChange(event) {
+    const file = event.target.files[0];
+    profilePicture.value = file;
+
+    if (file) {
+        picturePreview.value = URL.createObjectURL(file);
+    } else {
+        picturePreview.value = null;
+    }
+}
 
 onMounted(() => {
     const editForm = document.querySelector('#edit-form');
@@ -77,15 +101,20 @@ onMounted(() => {
     displayName.value = user.user.displayName;
     email.value = user.user.email;
     bio.value = user.user.bio;
-    
+
+    if (user.user.profile_picture) {
+        profilePictureUrl.value = `/storage/${user.user.profile_picture}`;
+    }
+
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const bodyRequest = {};
-        if (displayName.value) bodyRequest.display_name = displayName.value;
-        if (email.value) bodyRequest.email = email.value;
-        if (password.value) bodyRequest.password = password.value;
-        if (bio.value) bodyRequest.bio = bio.value;
+        const formData = new FormData();
+        if (displayName.value) formData.append('display_name', displayName.value);
+        if (email.value) formData.append('email', email.value);
+        if (password.value) formData.append('password', password.value);
+        if (bio.value) formData.append('bio', bio.value);
+        if (profilePicture.value) formData.append('profile_picture', profilePicture.value);
 
         fetch("http://localhost:8000/api/user", {
             method: 'PUT',
@@ -93,8 +122,9 @@ onMounted(() => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${auth.token}`
+
             },
-            body: JSON.stringify(bodyRequest),
+            body: formData,
         })
             .then(response => {
                 if (!response.ok) {
