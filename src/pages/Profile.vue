@@ -1,5 +1,4 @@
 <template>
-
     <div class="flex flex-col justify-center items-center min-h-screen bg-dark-blue pt-4 pb-4">
         <div class="absolute top-3 left-3 h-10 w-10">
             <RouterLink to="/home">
@@ -8,19 +7,19 @@
         </div>
         <section class="pt-4 w-4/5 lg:w-1/2 text-white-snow">
             <div class="flex flex-col gap-8" v-if="userInfos.user">
-                <div class="flex justify-between items-center w-full">
-                    <div class="flex flex-col">
-                        <div class="text-2xl break-words">{{ userInfos.user.display_name }}</div>
-                        <div class="text-gray break-words">@{{ userInfos.user.username }}</div>
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-4 sm:gap-0">
+                    <div class="flex flex-col flex-grow min-w-0">
+                        <div class="text-xl sm:text-2xl lg:text-3xl break-words">{{ userInfos.user.display_name }}</div>
+                        <div class="text-gray break-words text-sm sm:text-base">@{{ userInfos.user.username }}</div>
                     </div>
-                    <div class="flex justify-center">
+                    <div class="flex justify-start sm:justify-end flex-shrink-0">
                         <RouterLink to="/profile/edit"
-                            class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-15 flex justify-center cursor-pointer">
+                            class="bg-light-blue text-dark-blue font-semibold p-1 sm:p-2 rounded-xl px-4 sm:px-6 lg:px-8 flex justify-center cursor-pointer text-sm sm:text-base whitespace-nowrap">
                             Edit profile
                         </RouterLink>
                     </div>
                 </div>
-                <div class="pb-5">{{ userInfos.user.bio }}</div>
+                <div class="pb-5 text-sm sm:text-base">{{ userInfos.user.bio }}</div>
             </div>
             <hr class="border-gray">
         </section>
@@ -30,9 +29,7 @@
                     :createdAt="post.created_at" />
             </div>
         </section>
-
     </div>
-
 </template>
 
 <script setup>
@@ -53,7 +50,6 @@ function getUserData() {
         headers: { Authorization: `Bearer ${auth.token}` }
     })
         .then(response => response.json())
-
         .then(data => {
             userInfos.value = data;
             user.setUser(data.user);
