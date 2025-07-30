@@ -8,15 +8,17 @@
 
         <form id="edit-form"
             class="flex flex-col justify-center items-left w-4/5 md:w-1/2 gap-3 font-body text-white-snow pt-8 pb-8">
-            <div class="flex justify-between">
-                <h2 class="text-3xl font-semibold">Edit profile</h2>
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold">Edit profile</h2>
 
-                <div class="flex justify-center">
-                    <button @click="deleteAccount" type="button" class="bg-red-900 text-white-snow font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                <div class="flex justify-start sm:justify-center flex-shrink-0">
+                    <button @click="deleteAccount" type="button"
+                        class="bg-red-900 text-white-snow font-semibold p-1 sm:p-2 rounded-xl px-4 sm:px-6 lg:px-8 cursor-pointer text-sm sm:text-base whitespace-nowrap">
                         Delete account
                     </button>
                 </div>
             </div>
+
             <div class=" bg-regular-blue rounded-2xl p-8 mt-4">
                 <div class="flex flex-col gap-2">
                     <label for="display-name">Display name</label>
@@ -35,21 +37,21 @@
                     <input v-model="password" type="password" name="password" placeholder="your password"
                         class="rounded-xl bg-dark-blue p-2">
                 </div>
- 
+
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
                     <textarea v-model="bio" name="bio" placeholder="your bio"
                         class="rounded-xl bg-dark-blue p-2 h-20 resize-none" />
                 </div>
-                
+
                 <p id="edit-error-message" class="hidden">
                     {{ errorMessage }}
                 </p>
 
                 <div class="flex justify-center mt-6">
                     <button type="submit"
-                    class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8 cursor-pointer">
-                    Save
+                        class="bg-light-blue text-dark-blue font-semibold p-1 rounded-xl px-8 cursor-pointer">
+                        Save
                     </button>
                 </div>
             </div>
@@ -77,7 +79,7 @@ onMounted(() => {
     displayName.value = user.user.displayName;
     email.value = user.user.email;
     bio.value = user.user.bio;
-    
+
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
