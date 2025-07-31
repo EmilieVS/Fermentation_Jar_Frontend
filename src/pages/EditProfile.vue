@@ -40,15 +40,15 @@
                 <div class="flex flex-col gap-2 mt-4">
                     <label for="bio">Bio</label>
                     <textarea v-model="bio" name="bio" placeholder="your bio"
-                        class="rounded-xl bg-dark-blue p-2 h-20 resize-none" />
+                        class="rounded-xl bg-dark-blue p-2 h-20 resize-none"/>
                 </div>
 
                 <div>
-                    <label for="profile_picture">Profile Picture</label>
-                    <input type="file" name="profile_picture" id="profile_picture" enctype="multipart/form-data"
-                        @change="handleProfilePictureChange">
-                    <img v-if="picturePreview" :src="picturePreview" alt="Profile Picture" width="200" />
-                    <p v-else>No profile picture uploaded.</p>
+                    <label for="profile_image">Profile Image</label>
+                    <input type="file" name="profile_image" id="profile_image" enctype="multipart/form-data"
+                        @change="handleImageChange">
+                    <img v-if="imagePreview" :src="imagePreview" alt="Profile Image" width="200" />
+                    <!-- <p v-else>No profile picture uploaded.</p> -->
                 </div>
 
                 <p id="edit-error-message" class="hidden">
@@ -71,8 +71,6 @@ import { useAuthStore } from '../stores/auth';
 import { useUserStore } from '../stores/user';
 import router from '../router/index.js';
 import { ref, onMounted } from 'vue';
-import { computed } from 'vue'
-import { defineProps } from 'vue'
 
 const auth = useAuthStore();
 const user = useUserStore();
@@ -80,17 +78,17 @@ const displayName = ref('');
 const email = ref('');
 const password = ref('');
 const bio = ref('');
-const profilePicture = ref(null)
-const picturePreview = ref(null)
+const profileImage = ref(null)
+const imagePreview = ref(null)
 
-function handleProfilePictureChange(event) {
+function handleImageChange(event) {
     const file = event.target.files[0];
-    profilePicture.value = file;
+    profileImage.value = file;
 
     if (file) {
-        picturePreview.value = URL.createObjectURL(file);
+        imagePreview.value = URL.createObjectURL(file);
     } else {
-        picturePreview.value = null;
+        imagePreview.value = null;
     }
 }
 
@@ -102,8 +100,8 @@ onMounted(() => {
     email.value = user.user.email;
     bio.value = user.user.bio;
 
-    if (user.user.profile_picture) {
-        profilePictureUrl.value = `/storage/${user.user.profile_picture}`;
+    if (user.user.profile_image) {
+        imagePreview.value = `/storage/${user.user.profile_image}`;
     }
 
     editForm.addEventListener("submit", (e) => {
@@ -114,13 +112,13 @@ onMounted(() => {
         if (email.value) formData.append('email', email.value);
         if (password.value) formData.append('password', password.value);
         if (bio.value) formData.append('bio', bio.value);
-        if (profilePicture.value) formData.append('profile_picture', profilePicture.value);
+        if (profileImage.value) formData.append('profile_image', profileImage.value);
 
         fetch("http://localhost:8000/api/user", {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+                // 'Accept': 'application/json',
                 'Authorization': `Bearer ${auth.token}`
 
             },
