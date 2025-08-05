@@ -18,16 +18,19 @@ Outils / Services : Vite — Vue Router — VSCode
 ---------------------------------------------------------------------------------------------------
 🧩 Fonctionnalités et compétences
 
-Authentification utilisateur	Intégration d’un système de login / signup via appels à l’API Laravel
+Authentification utilisateur	
 
-Fil d’actualité	Récupération dynamique des posts via Axios et affichage conditionnel
+Intégration d’un système de login / signup via appels à l’API Laravel
 
-Création de post	Formulaire connecté à l’API pour créer un post (gestion des états, erreurs)
+Fil d’actualité	: Récupération dynamique des posts et affichage conditionnel
 
-Page profil avec biographie et posts	Rendu dynamique avec Vue Router et composants modulaires
+Création de posts	: Formulaire connecté à l’API pour créer un post (gestion des états, erreurs)
+
+Page profil avec biographie et posts: Rendu dynamique avec Vue Router et composants modulaires
 
 Édition de profil	Préremplissage, modification et validation des champs utilisateur
 
 Responsive design	Utilisation de Tailwind CSS pour adapter l’interface à tous les écrans
 
 🔗 Lien vers le [Backend](https://github.com/EmilieVS/Fermentation_Jar_Backend.git)
+
